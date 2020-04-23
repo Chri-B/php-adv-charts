@@ -8,3 +8,7 @@
     width: 60%;
     margin: 0 auto;
 }
+
+canvas {
+    margin-bottom: 80px;
+}
