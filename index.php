@@ -19,6 +19,7 @@
         <div class="container">
             <canvas id="line-chart"></canvas>
             <canvas id="pie-chart"></canvas>
+            <canvas id="team-line-chart"></canvas>
         </div>
         <!-- FINE STEP 2 -->
 

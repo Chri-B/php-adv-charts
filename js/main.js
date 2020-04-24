@@ -1,76 +1,84 @@
 
 var arrayMesi = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
 
-// ------------- STEP 1 -------------
-// $.ajax({
-//     url: 'server/server_line_chart.php',
-//     method: 'GET',
-//     success: function(data) {
-//         createLineChart('#line-chart-primo', arrayMesi, data);
-//     },
-//     error: function (err) {
-//         alert('Errore comunicazione');
-//     }
-// });
-// ------------- FINE STEP 1 -------------
-
-
-// ------------- STEP 2 -------------
+// ------------- STEP 3 -------------
 $.ajax({
-    url: 'server/server_graphs.php',
+    url: 'server/fatturato.php',
     method: 'GET',
     success: function (data) {
-        for (var graph in data) {
-            var singleObject = data[graph];
-            if (singleObject['type'] == 'line') {
-                var venditeAnno = singleObject['data'];
-                createLineChart('#line-chart', arrayMesi, venditeAnno);
-            } else if (singleObject['type'] == 'pie') {
-                var agents = [];
-                var venditeAgents = [];
-                for (var agent in singleObject['data']) {
-                    agents.push(agent);
-                    venditeAgents.push(singleObject['data'][agent]);
-                }
-                createPieChart('#pie-chart', agents, venditeAgents);
-            }
-        }
+        createChart('#line-chart', data.tipo_grafico, arrayMesi, data.vendite, 'rgba(255, 0, 0, 0.3)');
     },
     error: function (err) {
-        alert('Errore comunicazione');
+        alert('Errore Comunicazione');
     }
 });
-// ------------- FINE STEP 2 -------------
+
+$.ajax({
+    url: 'server/fatturato_by_agent.php',
+    method: 'GET',
+    success: function (data) {
+        console.log(data);
+        createChart('#pie-chart', data.tipo_grafico, data.nomi, data.vendite, ['yellow', 'green', 'blue', 'red']);
+    },
+    error: function (err) {
+        alert('Errore Comunicazione');
+    }
+});
+
+$.ajax({
+    url: 'server/team_efficiency.php',
+    method: 'GET',
+    success: function (data) {
+        console.log(data);
+        createChartTriplo('#team-line-chart', data.tipo_grafico, arrayMesi, data.vendite[0], data.team[0], data.vendite[1], data.team[1], data.vendite[2], data.team[2], ['yellow', 'green', 'blue', 'red']);
+    },
+    error: function (err) {
+        alert('Errore Comunicazione');
+    }
+});
+
+// ------------- FINE STEP 3 -------------
 
 
-// funzione per creazione grafico Line
-function createLineChart(selettoreCanvas, arrayMes, data) {
+// funzione per creazione grafici
+function createChart(selettoreCanvas, tipoGrafico, labels, data, colore_sfondo) {
     var lineChart = new Chart($(selettoreCanvas), {
-        type: 'line',
+        type: tipoGrafico,
         data: {
-            labels: arrayMes,
+            labels: labels,
             datasets: [{
                 label: 'Vendite Mensili Anno 2020',
-                backgroundColor: 'rgba(255, 0, 0, 0.3)',
-                borderColor: 'rgb(255, 0, 0)',
                 data: data,
-                lineTension: 0
+                backgroundColor: colore_sfondo
             }]
         }
     });
 }
 
-// funzione per creazione grafico Pie
-function createPieChart(selettoreCanvas, labels, dati) {
-    var pieChart = new Chart($(selettoreCanvas), {
-        type: 'pie',
+// funzione per creazione grafico line con 3 dataset
+function createChartTriplo(selettoreCanvas, tipoGrafico, labels, dataPrimo, nomePrimo, dataSecondo, nomeSecondo, dataTerzo, nomeTerzo) {
+    var lineChart = new Chart($(selettoreCanvas), {
+        type: tipoGrafico,
         data: {
             labels: labels,
             datasets: [{
-                label: 'Vendite Mensili',
-                data: dati,
-                backgroundColor: ['lightgreen', 'lightblue', 'lightcoral', 'yellow']
+                label: nomePrimo,
+                data: dataPrimo,
+                backgroundColor: 'rgba(110, 110, 110, 0.3)',
+                borderColor: 'blue'
+            },
+            {
+                label: nomeSecondo,
+                data: dataSecondo,
+                backgroundColor: 'rgba(110, 110, 110, 0.3)',
+                borderColor: 'red'
+            },
+            {
+                label: nomeTerzo,
+                data: dataTerzo,
+                backgroundColor: 'rgba(110, 110, 110, 0.3)',
+                borderColor: 'green'
             }]
-        },
+        }
     });
 }
