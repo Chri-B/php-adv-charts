@@ -17,7 +17,6 @@ $.ajax({
     url: 'server/fatturato_by_agent.php',
     method: 'GET',
     success: function (data) {
-        console.log(data);
         createChart('#pie-chart', data.tipo_grafico, data.nomi, data.vendite, ['yellow', 'green', 'blue', 'red']);
     },
     error: function (err) {
@@ -29,7 +28,6 @@ $.ajax({
     url: 'server/team_efficiency.php',
     method: 'GET',
     success: function (data) {
-        console.log(data);
         createChartTriplo('#team-line-chart', data.tipo_grafico, arrayMesi, data.vendite[0], data.team[0], data.vendite[1], data.team[1], data.vendite[2], data.team[2], ['yellow', 'green', 'blue', 'red']);
     },
     error: function (err) {

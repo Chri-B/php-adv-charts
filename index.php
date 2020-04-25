@@ -9,19 +9,21 @@
         <link rel="stylesheet" href="css/master.css">
     </head>
     <body>
-        <!-- STEP 1 -->
-        <!-- <div class="container">
-            <canvas id="line-chart-primo"></canvas>
-        </div> -->
-        <!-- FINE STEP 1 -->
-
-        <!-- STEP 2 -->
+        <?php
+            $level = $_GET['level'];
+        ?>
         <div class="container">
-            <canvas id="line-chart"></canvas>
-            <canvas id="pie-chart"></canvas>
-            <canvas id="team-line-chart"></canvas>
+            <?php if ($level == '' || $level == 'guest') {; ?>
+                <canvas id="line-chart"></canvas>
+            <?php } elseif ($level == 'employee') {; ?>
+                <canvas id="line-chart"></canvas>
+                <canvas id="pie-chart"></canvas>
+            <?php } elseif ($level == 'clevel') {; ?>
+                <canvas id="line-chart"></canvas>
+                <canvas id="pie-chart"></canvas>
+                <canvas id="team-line-chart"></canvas>
+            <?php }; ?>
         </div>
-        <!-- FINE STEP 2 -->
 
         <script src="js/main.js" charset="utf-8"></script>
     </body>
